@@ -1,7 +1,7 @@
 #!/bin/bash
-echo "INFO: About to run setup-ansible-controller-ssh-keys.sh"
+echo "INFO: About to run setup-ansible-puppetmaster-ssh-keys.sh"
 
-cp /vagrant/files/ssh-keys/controller/.ssh /root/ -rf
+cp /vagrant/files/ssh-keys/puppetmaster/.ssh /root/ -rf
 
 chown --recursive root:root /root/.ssh
 

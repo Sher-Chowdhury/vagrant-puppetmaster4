@@ -8,21 +8,21 @@ This is a combined packer+vagrant project. The packer side outputs .box files wh
 $ vagrant status
 Current machine states:
 
-controller                not created (virtualbox)
-ansibleclient01           not created (virtualbox)
-ansibleclient02           not created (virtualbox)
+puppetmaster                not created (virtualbox)
+puppetagent01           not created (virtualbox)
+puppetagent02           not created (virtualbox)
 
 This environment represents multiple VMs. The VMs are all listed
 above with their current state. For more information about a specific
 VM, run `vagrant status NAME`.
 ```
 
-Here we have the controller vm, this has the free version of ansible installed. ansibleclient01 and ansibleclient02 are just Centos 7 installs. 
+Here we have the puppetmaster vm, this has the free version of ansible installed. puppetagent01 and puppetagent02 are just Centos 7 installs. 
 
-On the controller server, we have as user called "ansible":
+On the puppetmaster server, we have as user called "ansible":
 
 ```
-[root@controller ~]# cat /etc/passwd | grep ansible
+[root@puppetmaster ~]# cat /etc/passwd | grep ansible
 ansible:x:1001:1001::/home/ansible:/bin/bash
 ```
 
@@ -30,7 +30,7 @@ ansible:x:1001:1001::/home/ansible:/bin/bash
 The environmeent is set up so that this "ansible" user can run ansible commands:
 
 ```
-[ansible@controller ~]$ ansible --version
+[ansible@puppetmaster ~]$ ansible --version
 ansible 2.1.0 (devel 5cd3f71792) last updated 2016/02/02 22:03:51 (GMT +100)
   lib/ansible/modules/core: (detached HEAD 93d02189f6) last updated 2016/02/02 22:04:02 (GMT +100)
   lib/ansible/modules/extras: (detached HEAD fff5ae6994) last updated 2016/02/02 22:04:12 (GMT +100)
@@ -114,7 +114,7 @@ Start a git-bash terminal
 cd into the project folder and run the following to create the 2 ".box"" files
 
 ```sh
-$ packer build controller.json
+$ packer build puppetmaster.json
 $ packer build client.json
 ```
 Each of the above commands will take about 20 minutes to complete, but depends on your machine specs and internet connections. 
@@ -122,15 +122,15 @@ Each of the above commands will take about 20 minutes to complete, but depends o
 The Run the following:
 
 ```sh
-$ vagrant up controller
+$ vagrant up puppetmaster
 ``` 
 
 There are also 2 ansible CentOS 7 clients that you can start up:
 
 
 ```sh
-$ vagrant up ansibleclient01
-$ vagrant up ansibleclient01
+$ vagrant up puppetagent01
+$ vagrant up puppetagent01
 ``` 
 
 
@@ -140,9 +140,9 @@ $ vagrant up ansibleclient01
 Enter this in the windows hosts file (C:\Windows\System32\drivers\etc\hosts):
 
 ```
-192.168.50.100   controller controller.local
-192.168.50.101   ansibleclient01 ansibleclient01.local
-192.168.50.102   ansibleclient02 ansibleclient02.local
+192.168.50.100   puppetmaster puppetmaster.local
+192.168.50.101   puppetagent01 puppetagent01.local
+192.168.50.102   puppetagent02 puppetagent02.local
 ```
 
 ### Login credentials
@@ -173,13 +173,13 @@ On accasions you'll want to reset your vagrant boxes. This is usually done by do
 For each vm, a virtualbox is taken towards the end of your "vagrant up". This snapshot is called "baseline". If you want to roll back to this snapshot, then you do:
 
 ```
-vagrant snapshot go controller baseline
+vagrant snapshot go puppetmaster baseline
 ```
 
-...or for an ansible client, e.g. ansibleclient01, you do:
+...or for an ansible client, e.g. puppetagent01, you do:
 
 ```
-vagrant snapshot go ansibleclient01 baseline
+vagrant snapshot go puppetagent01 baseline
 ```
 
 

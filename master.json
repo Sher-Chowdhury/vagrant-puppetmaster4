@@ -8,27 +8,30 @@
       "iso_checksum_type": "sha256",
       "ssh_username": "root",
       "ssh_password": "vagrant",
-	  "http_directory": "kickstart",
-      "ssh_wait_timeout": "3000s",	  
-	  "boot_wait": "10s",
-	  "boot_command": [ "<tab>", " ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/client-ks.cfg <enter>"	  ],
-	  "guest_additions_mode": "upload",
+      "http_directory": "kickstart",
+      "ssh_wait_timeout": "3000s",
+      "boot_wait": "10s",
+      "boot_command": [ "<tab>", " ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/puppetmaster-ks.cfg <enter>"	  ],
+      "guest_additions_mode": "upload",
       "shutdown_command": "shutdown now"
     }
   ],
 
   "provisioners": [
-    {
+	{
       "type": "shell",
-      "scripts": [ 
-	    "scripts/set-private-keys.sh"		
-	  ]
-    }
-	
+      "scripts": [
+        "scripts/set-private-keys.sh",
+        "scripts/update-git.sh"
+      ],
+      "start_retry_timeout": "5m",
+	  "pause_before": "120s"
+	}
+
   ],
 
   "post-processors": [{
     "type": "vagrant",
-    "output": "client.box"
+    "output": "puppetmaster.box"
   }]
 }

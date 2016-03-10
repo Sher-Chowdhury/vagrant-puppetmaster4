@@ -10,14 +10,14 @@
 
 # Ex 1: Ungrouped hosts, specify before any group headers.
 
-ansibleclient01.local
-ansibleclient02.local
+puppetagent01.local
+puppetagent02.local
 
 # Ex 2: A collection of hosts belonging to the 'clients' group
 
 [clients]
-ansibleclient01.local
-ansibleclient02.local
+puppetagent01.local
+puppetagent02.local
 
 
 
