@@ -18,7 +18,7 @@ end
 
 Vagrant.configure(2) do |config|
   ##
-  ## Ansible puppetmaster
+  ##  puppetmaster
   ##
   # The "puppetmaster" string is the name of the box. hence you can do "vagrant up puppetmaster"
   config.vm.define "puppetmaster" do |puppetmaster_config|
