@@ -17,11 +17,13 @@
 
 rpm -ivh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
 
-yum install puppetserver
+yum install -y puppetserver
 
 systemctl enable puppetserver
 systemctl start puppetserver
 
 
+# http://docs.puppetlabs.com/puppet/4.3/reference/whered_it_go.html
+echo "PATH=$PATH:/opt/puppetlabs/bin" >> /etc/bashrc
 
 
