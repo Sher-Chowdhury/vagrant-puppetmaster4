@@ -32,6 +32,6 @@
 
   "post-processors": [{
     "type": "vagrant",
-    "output": "master.box"
+    "output": "master4.box"
   }]
 }

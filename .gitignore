@@ -6,7 +6,7 @@
 /personal-data/r10k.yaml
 /personal-data/GitServerCertificates
 /packer_cache
-
+/output-virtualbox-iso
 *.box
 .vagrant
 /tmp
