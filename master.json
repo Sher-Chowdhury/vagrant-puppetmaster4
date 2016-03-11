@@ -32,6 +32,6 @@
 
   "post-processors": [{
     "type": "vagrant",
-    "output": "puppetmaster.box"
+    "output": "master.box"
   }]
 }
