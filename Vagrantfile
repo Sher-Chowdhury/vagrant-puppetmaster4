@@ -25,11 +25,11 @@ Vagrant.configure(2) do |config|
     puppetmaster_config.vm.box = "master4.box"
 
     # this set's the machine's hostname.
-    puppetmaster_config.vm.hostname = "puppetmaster.local"
+    puppetmaster_config.vm.hostname = "puppetmaster4.local"
 
 
     # This will appear when you do "ip addr show". You can then access your guest machine's website using "http://192.168.50.4"
-    puppetmaster_config.vm.network "private_network", ip: "192.168.50.100"
+    puppetmaster_config.vm.network "private_network", ip: "192.168.51.100"
     # note: this approach assigns a reserved internal ip addresses, which virtualbox's builtin router then reroutes the traffic to,
     #see: https://en.wikipedia.org/wiki/Private_network
 
@@ -42,7 +42,7 @@ Vagrant.configure(2) do |config|
       # However for more obscure virtualbox specific settings we fall back to virtualbox's "modifyvm" command:
       vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
       # name of machine that appears on the vb console and vb consoles title.
-      vb.name = "puppetmaster"
+      vb.name = "puppetmaster4"
     end
 
     puppetmaster_config.vm.provision :host_shell do |host_shell|
@@ -60,7 +60,7 @@ Vagrant.configure(2) do |config|
     puppetmaster_config.vm.provision "shell", path: "scripts/import-ssh-keys.sh"
 
     puppetmaster_config.vm.provision "shell", path: "scripts/install-puppetmaster4.sh"
-
+	puppetmaster_config.vm.provision "shell", path: "scripts/install-vim-puppet-plugins.sh", privileged: false
     # for some reason I have to restart network, but this needs more investigation
     puppetmaster_config.vm.provision "shell" do |remote_shell|
       remote_shell.inline = "systemctl restart network"
