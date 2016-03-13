@@ -15,15 +15,26 @@
 # http://docs.puppetlabs.com/puppet/4.3/reference/whered_it_go.html#new-codedir-holds-all-modulesmanifestsdata
 
 
-rpm -ivh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
+rpm -ivh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm  || exit 1
 
-yum install -y puppetserver
+yum install -y puppetserver || exit 1
 
-systemctl enable puppetserver
-systemctl start puppetserver
+
+# https://docs.puppetlabs.com/puppetserver/latest/install_from_packages.html#memory-allocation
+sed -i s/^JAVA_ARGS/#JAVA_ARGS/g /etc/sysconfig/puppetserver || exit 1
+#echo 'JAVA_ARGS="-Xms512m -Xmx512m -XX:MaxPermSize=256m"' >> /etc/sysconfig/puppetserver
+echo 'JAVA_ARGS="-Xms512m -Xmx512m"' >> /etc/sysconfig/puppetserver
 
 
 # http://docs.puppetlabs.com/puppet/4.3/reference/whered_it_go.html
-echo "PATH=$PATH:/opt/puppetlabs/bin" >> /etc/bashrc
+echo "PATH=$PATH:/opt/puppetlabs/bin" >> /root/.bashrc
 
+# this is so to get the puppetmaster to autosign puppet agent certificicates. 
+# This means that you no longer need to do "puppet cert sign...etc"
+# https://docs.puppetlabs.com/puppet/latest/reference/ssl_autosign.html#basic-autosigning-autosignconf
+# https://docs.puppetlabs.com/puppet/latest/reference/config_file_autosign.html
+echo '*' >> /etc/puppet/autosign.conf
 
+systemctl enable puppetserver
+systemctl start puppetserver
+systemctl status puppetserver
