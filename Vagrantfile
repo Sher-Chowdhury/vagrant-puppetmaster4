@@ -37,7 +37,7 @@ Vagrant.configure(2) do |config|
       # Display the VirtualBox GUI when booting the machine
       vb.gui = true
       # For common vm settings, e.g. setting ram and cpu we use:
-      vb.memory = "1024"
+      vb.memory = "2048"
       vb.cpus = 2
       # However for more obscure virtualbox specific settings we fall back to virtualbox's "modifyvm" command:
       vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]

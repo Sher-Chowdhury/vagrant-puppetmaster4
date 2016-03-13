@@ -1,47 +1,56 @@
 #!/bin/bash
+# Some useful plugins: http://vimawesome.com/
 
-echo "Started install-gems.sh"
-echo "line4"
-abrt-cli list
-#[ `abrt-cli list | wc -l` -gt 0 ] && exit 1 
-
-gem source https://rubygems.org
-
-gem install r10k --no-ri --no-rdoc
-mkdir -p /etc/puppetlabs/r10k
-echo "PATH=$PATH:/usr/local/bin" >> /root/.bashrc   # this is where r10k is executable is stored. 
+## The following gems are needed:
+gem install puppet-lint              # http://puppet-lint.com/
+gem install puppet-syntax
 
 
-#gem install bundler --no-ri --no-rdoc
-#gem install rake --no-ri --no-rdoc
+mkdir -p ~/.vim/autoload ~/.vim/bundle
+curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 
 
-# Installing rvm for the vagrant user
-runuser -l vagrant -c 'gpg2 --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3'
-runuser -l vagrant -c 'curl -sSL https://get.rvm.io | bash -s stable --ruby'
-runuser -l vagrant -c 'rvm install 2.0.0'  
-# runuser -l vagrant -c 'rvm install 1.9.3'
-# runuser -l vagrant -c 'rvm install 1.8.7'
-# runuser -l vagrant -c 'rvm install 2.2.3'
-runuser -l vagrant -c 'rvm use --default 2.0.0'
-runuser -l vagrant -c 'rvm all do gem install bundler'  
-runuser -l vagrant -c 'rvm all do gem install json'          # required by vim plugins
-runuser -l vagrant -c 'rvm all do gem install puppet-syntax' # required by vim plugins
-runuser -l vagrant -c 'rvm all do gem install puppet-lint'   # required by vim plugins
+cd ~/.vim/bundle
+git clone https://github.com/scrooloose/syntastic.git
+git clone git://github.com/rodjek/vim-puppet.git
+git clone git://github.com/godlygeek/tabular.git
+git clone https://github.com/scrooloose/nerdtree.git
 
 
 
-#runuser -l vagrant -c 'rvm use system'
+# vim snippets and shipmate:
 
-echo "line35"
-abrt-cli list
+git clone https://github.com/tomtom/tlib_vim.git
+git clone https://github.com/MarcWeber/vim-addon-mw-utils.git
+git clone https://github.com/garbas/vim-snipmate.git
+git clone https://github.com/honza/vim-snippets.git
+
+echo "execute pathogen#infect()" > ~/.vimrc
+echo "syntax on" >> ~/.vimrc
+echo "filetype plugin indent on" >> ~/.vimrc
+echo "filetype on" >> ~/.vimrc
+echo "set statusline+=%#warningmsg#" >> ~/.vimrc
+echo "set statusline+=%{SyntasticStatuslineFlag()}" >> ~/.vimrc
+echo "set statusline+=%*" >> ~/.vimrc
+echo "let g:syntastic_always_populate_loc_list = 1" >> ~/.vimrc
+echo "let g:syntastic_auto_loc_list = 1" >> ~/.vimrc
+echo "let g:syntastic_check_on_open = 1" >> ~/.vimrc
+echo "let g:syntastic_check_on_wq = 1" >> ~/.vimrc
+
+# http://vim.wikia.com/wiki/Indenting_source_code
+echo "set expandtab" >> ~/.vimrc
+echo "set shiftwidth=2" >> ~/.vimrc
+echo "set softtabstop=2" >> ~/.vimrc
+# In vim, to automatically reindent, do "gg=G" while in vim's navigation mode. 
 
 
-#[ `abrt-cli list | wc -l` -gt 0 ] && exit 1 
+echo 'PATH=$PATH:/home/vagrant/bin' >> /home/vagrant/.bashrc  # this is to get puppet lint to work. 
 
-systemctl enable NetworkManager 
 
-echo "rvm now setup, now about to do a reboot."
-reboot
-sleep 120
+# here's some extra configurations to make vim easier to use:
+
+cat /vagrant/files/.vimrc >> ~/.vimrc
+
+echo "--no-80chars-check" >> ~/.puppet-lint.rc    # http://stackoverflow.com/questions/29206887/puppet-lint-configuration-file
+                                                  # https://github.com/rodjek/puppet-lint#puppet-lint-1
 

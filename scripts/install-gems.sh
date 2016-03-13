@@ -1,10 +1,5 @@
 #!/bin/bash
 
-echo "Started install-gems.sh"
-echo "line4"
-abrt-cli list
-#[ `abrt-cli list | wc -l` -gt 0 ] && exit 1 
-
 gem source https://rubygems.org
 
 gem install r10k --no-ri --no-rdoc
