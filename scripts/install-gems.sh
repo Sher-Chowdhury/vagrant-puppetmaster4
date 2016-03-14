@@ -3,10 +3,11 @@
 gem source https://rubygems.org
 
 gem install r10k --no-ri --no-rdoc
+# https://github.com/puppetlabs/r10k/blob/master/doc/dynamic-environments/configuration.mkd#automatic-configuration
 mkdir -p /etc/puppetlabs/r10k
 echo "PATH=$PATH:/usr/local/bin" >> /root/.bashrc   # this is where r10k is executable is stored. 
 
-
+exit 0
 #gem install bundler --no-ri --no-rdoc
 #gem install rake --no-ri --no-rdoc
 
@@ -25,14 +26,6 @@ runuser -l vagrant -c 'rvm all do gem install puppet-syntax' # required by vim p
 runuser -l vagrant -c 'rvm all do gem install puppet-lint'   # required by vim plugins
 
 
-
-#runuser -l vagrant -c 'rvm use system'
-
-echo "line35"
-abrt-cli list
-
-
-#[ `abrt-cli list | wc -l` -gt 0 ] && exit 1 
 
 systemctl enable NetworkManager 
 
