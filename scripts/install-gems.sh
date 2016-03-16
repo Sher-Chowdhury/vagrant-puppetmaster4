@@ -1,13 +1,19 @@
 #!/bin/bash
 
-gem source https://rubygems.org
+gem source https://rubygems.org    || exit 1
 
-gem install r10k --no-ri --no-rdoc
+gem install r10k --no-ri --no-rdoc  || exit 1
 # https://github.com/puppetlabs/r10k/blob/master/doc/dynamic-environments/configuration.mkd#automatic-configuration
-mkdir -p /etc/puppetlabs/r10k
-echo "PATH=$PATH:/usr/local/bin" >> /root/.bashrc   # this is where r10k is executable is stored. 
+mkdir -p /etc/puppetlabs/r10k || exit 1
+echo "PATH=$PATH:/usr/local/bin" >> /root/.bashrc || exit 1       # this is where r10k is executable is stored. 
+
+
 
 exit 0
+
+
+
+
 #gem install bundler --no-ri --no-rdoc
 #gem install rake --no-ri --no-rdoc
 
