@@ -60,7 +60,7 @@ Vagrant.configure(2) do |config|
     puppetmaster_config.vm.provision "shell", path: "scripts/import-ssh-keys.sh"
 
     puppetmaster_config.vm.provision "shell", path: "scripts/install-puppetmaster4.sh"
-	puppetmaster_config.vm.provision "shell", path: "scripts/install-vim-puppet-plugins.sh", privileged: false
+    puppetmaster_config.vm.provision "shell", path: "scripts/install-vim-puppet-plugins.sh", privileged: false
     # for some reason I have to restart network, but this needs more investigation
     puppetmaster_config.vm.provision "shell" do |remote_shell|
       remote_shell.inline = "systemctl restart network"
