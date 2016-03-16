@@ -1,5 +1,10 @@
 #!/bin/bash
 
+echo '##########################################################################'
+echo '##### About to run install-puppetmaster4.sh script #######################'
+echo '##########################################################################'
+
+
 # this is really important:
 # http://docs.puppetlabs.com/puppet/4.3/reference/whered_it_go.html#new-codedir-holds-all-modulesmanifestsdata
 
@@ -33,7 +38,10 @@ echo "PATH=$PATH:/opt/puppetlabs/bin" >> /root/.bashrc
 # This means that you no longer need to do "puppet cert sign...etc"
 # https://docs.puppetlabs.com/puppet/latest/reference/ssl_autosign.html#basic-autosigning-autosignconf
 # https://docs.puppetlabs.com/puppet/latest/reference/config_file_autosign.html
-echo '*' >> /etc/puppet/autosign.conf
+
+puppet config set autosign true
+# echo '*' >> /etc/puppet/autosign.conf   # this line doesn't work in puppet4, may need to change this to something a bit different, or just use the above command if you 
+                                          # want global allow permissions. 
 
 systemctl enable puppetserver
 systemctl start puppetserver
