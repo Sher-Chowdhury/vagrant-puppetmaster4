@@ -33,6 +33,8 @@ echo 'JAVA_ARGS="-Xms512m -Xmx512m"' >> /etc/sysconfig/puppetserver
 
 # http://docs.puppetlabs.com/puppet/4.3/reference/whered_it_go.html
 echo "PATH=$PATH:/opt/puppetlabs/bin" >> /root/.bashrc
+PATH=$PATH:/opt/puppetlabs/bin || exit 1
+puppet --version || exit 1
 
 # this is so to get the puppetmaster to autosign puppet agent certificicates. 
 # This means that you no longer need to do "puppet cert sign...etc"
@@ -43,6 +45,6 @@ puppet config set autosign true
 # echo '*' >> /etc/puppet/autosign.conf   # this line doesn't work in puppet4, may need to change this to something a bit different, or just use the above command if you 
                                           # want global allow permissions. 
 
-systemctl enable puppetserver
-systemctl start puppetserver
-systemctl status puppetserver
+systemctl enable puppetserver || exit 1
+systemctl start puppetserver  || exit 1
+systemctl status puppetserver || exit 1
