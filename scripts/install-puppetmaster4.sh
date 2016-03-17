@@ -42,8 +42,8 @@ puppet --version || exit 1
 # https://docs.puppetlabs.com/puppet/latest/reference/config_file_autosign.html
 
 puppet config set autosign true
-# echo '*' >> /etc/puppet/autosign.conf   # this line doesn't work in puppet4, may need to change this to something a bit different, or just use the above command if you 
-                                          # want global allow permissions. 
+# echo '*' >> /etc/puppet/autosign.conf   # this line needs fixing, see:
+					  # https://docs.puppetlabs.com/puppet/latest/reference/config_file_autosign.html 
 
 systemctl enable puppetserver || exit 1
 systemctl start puppetserver  || exit 1
