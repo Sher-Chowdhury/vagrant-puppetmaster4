@@ -5,6 +5,8 @@ echo '##### About to run install-puppetmaster4.sh script #######################
 echo '##########################################################################'
 
 
+yum install -y ruby-devel   # this line is no longer required, so delete it since it has been added in the kickstart file.
+
 # this is really important:
 # http://docs.puppetlabs.com/puppet/4.3/reference/whered_it_go.html#new-codedir-holds-all-modulesmanifestsdata
 
