@@ -28,11 +28,11 @@ yum install -y puppetserver || exit 1
 # https://docs.puppetlabs.com/puppetserver/latest/install_from_packages.html#memory-allocation
 sed -i s/^JAVA_ARGS/#JAVA_ARGS/g /etc/sysconfig/puppetserver || exit 1
 #echo 'JAVA_ARGS="-Xms512m -Xmx512m -XX:MaxPermSize=256m"' >> /etc/sysconfig/puppetserver
-echo 'JAVA_ARGS="-Xms512m -Xmx512m"' >> /etc/sysconfig/puppetserver
+echo 'JAVA_ARGS="-Xms512m -Xmx512m"' >> /etc/sysconfig/puppetserver || exit 1
 
 
 # http://docs.puppetlabs.com/puppet/4.3/reference/whered_it_go.html
-echo "PATH=$PATH:/opt/puppetlabs/bin" >> /root/.bashrc
+echo "PATH=$PATH:/opt/puppetlabs/bin" >> /root/.bashrc || exit 1
 PATH=$PATH:/opt/puppetlabs/bin || exit 1
 puppet --version || exit 1
 
