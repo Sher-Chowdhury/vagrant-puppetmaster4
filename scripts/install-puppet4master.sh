@@ -53,8 +53,10 @@ puppet config set autosign true
 ##
 ## https://docs.puppetlabs.com/puppet/latest/reference/config_about_settings.html
 ## https://docs.puppetlabs.com/puppet/latest/reference/configuration.html
-puppet config set certname `hostname` --section agent 
-puppet config set server `hostname` --section agent 
+fqdn=`hostnamectl | grep 'Static hostname' | cut -d':' -f2`
+
+puppet config set certname $fqdn --section agent 
+puppet config set server $fqdn --section agent 
 
 #echo '    certname          = puppet4master.local' >> /etc/puppetlabs/puppet/puppet.conf
 #echo '    server            = puppet4master.local' >> /etc/puppetlabs/puppet/puppet.conf
