@@ -53,48 +53,13 @@ puppet config set autosign true
 ##
 ## https://docs.puppetlabs.com/puppet/latest/reference/config_about_settings.html
 ## https://docs.puppetlabs.com/puppet/latest/reference/configuration.html
-echo '[agent]' >> /etc/puppetlabs/puppet/puppet.conf
-#echo '    # The file in which puppetd stores a list of the classes'  >> /etc/puppetlabs/puppet/puppet.conf
-#echo '    # associated with the retrieved configuration.  Can be loaded in'  >> /etc/puppetlabs/puppet/puppet.conf
-#echo '    # the separate ``puppet`` executable using the ``--loadclasses``' >> /etc/puppetlabs/puppet/puppet.conf
-#echo '    # option.' >> /etc/puppetlabs/puppet/puppet.conf
-#echo '    # The default value is '$statedir/classes.txt'.' >> /etc/puppetlabs/puppet/puppet.conf
-#echo '    classfile = $statedir/classes.txt' >> /etc/puppetlabs/puppet/puppet.conf
+puppet config set certname `hostname` --section agent 
+puppet config set server `hostname` --section agent 
 
-#echo '    # Where puppetd caches the local configuration.  An' >> /etc/puppetlabs/puppet/puppet.conf
-#echo '    # extension indicating the cache format is added automatically.' >> /etc/puppetlabs/puppet/puppet.conf
-#echo '    # The default value is '$confdir/localconfig'.' >> /etc/puppetlabs/puppet/puppet.conf
-#echo '    localconfig = $vardir/localconfig' >> /etc/puppetlabs/puppet/puppet.conf
-
-#echo '    # Disable the default schedules as they cause continual skipped'  >> /etc/puppetlabs/puppet/puppet.conf
-#echo '    # resources to be displayed in Foreman - only for Puppet >= 3.4' >> /etc/puppetlabs/puppet/puppet.conf
-#echo '    default_schedules = false' >> /etc/puppetlabs/puppet/puppet.conf
-
-#echo '    report            = true' >> /etc/puppetlabs/puppet/puppet.conf
-#echo '    pluginsync        = true' >> /etc/puppetlabs/puppet/puppet.conf
-#echo '    masterport        = 8140' >> /etc/puppetlabs/puppet/puppet.conf
-#echo '    environment       = production' >> /etc/puppetlabs/puppet/puppet.conf
-echo '    certname          = puppet4master.local' >> /etc/puppetlabs/puppet/puppet.conf
-echo '    server            = puppet4master.local' >> /etc/puppetlabs/puppet/puppet.conf
-#echo '    listen            = false' >> /etc/puppetlabs/puppet/puppet.conf     # this no longer exists. 
-#echo '    splay             = false' >> /etc/puppetlabs/puppet/puppet.conf
-#echo '    splaylimit        = 1800' >> /etc/puppetlabs/puppet/puppet.conf
-#echo '    runinterval       = 1800' >> /etc/puppetlabs/puppet/puppet.conf
-#echo '    noop              = false' >> /etc/puppetlabs/puppet/puppet.conf
-#echo '    configtimeout     = 120' >> /etc/puppetlabs/puppet/puppet.conf
-#echo '    usecacheonfailure = true' >> /etc/puppetlabs/puppet/puppet.conf
-
-
-
-
-
-
-
-
-
-
-
+#echo '    certname          = puppet4master.local' >> /etc/puppetlabs/puppet/puppet.conf
+#echo '    server            = puppet4master.local' >> /etc/puppetlabs/puppet/puppet.conf
 
 systemctl enable puppetserver || exit 1
 systemctl start puppetserver  || exit 1
+systemctl restart puppetserver  || exit 1
 systemctl status puppetserver || exit 1
