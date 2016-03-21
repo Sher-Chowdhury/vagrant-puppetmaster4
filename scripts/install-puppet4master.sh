@@ -43,7 +43,7 @@ puppet --version || exit 1
 # https://docs.puppetlabs.com/puppet/latest/reference/ssl_autosign.html#basic-autosigning-autosignconf
 # https://docs.puppetlabs.com/puppet/latest/reference/config_file_autosign.html
 
-puppet config set autosign true
+puppet config set autosign true --section master
 # echo '*' >> /etc/puppet/autosign.conf   # this line needs fixing, see:
 					  # https://docs.puppetlabs.com/puppet/latest/reference/config_file_autosign.html 
 
