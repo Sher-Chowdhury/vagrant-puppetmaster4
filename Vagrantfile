@@ -35,7 +35,7 @@ Vagrant.configure(2) do |config|
 
     puppet4master_config.vm.provider "virtualbox" do |vb|
       # Display the VirtualBox GUI when booting the machine
-      vb.gui = true
+      vb.gui = false
       # For common vm settings, e.g. setting ram and cpu we use:
       vb.memory = "2048"
       vb.cpus = 2
