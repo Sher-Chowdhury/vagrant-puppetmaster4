@@ -8,7 +8,7 @@ This is a combined packer+vagrant project. The packer side outputs .box files wh
 $ vagrant status
 Current machine states:
 
-puppetmaster                not created (virtualbox)
+puppetmaster            not created (virtualbox)
 puppetagent01           not created (virtualbox)
 puppetagent02           not created (virtualbox)
 
@@ -19,27 +19,6 @@ VM, run `vagrant status NAME`.
 
 Here we have the puppetmaster vm, this has the free version of ansible installed. puppetagent01 and puppetagent02 are just Centos 7 installs. 
 
-On the puppetmaster server, we have as user called "ansible":
-
-```
-[root@puppetmaster ~]# cat /etc/passwd | grep ansible
-ansible:x:1001:1001::/home/ansible:/bin/bash
-```
-
-
-The environmeent is set up so that this "ansible" user can run ansible commands:
-
-```
-[ansible@puppetmaster ~]$ ansible --version
-ansible 2.1.0 (devel 5cd3f71792) last updated 2016/02/02 22:03:51 (GMT +100)
-  lib/ansible/modules/core: (detached HEAD 93d02189f6) last updated 2016/02/02 22:04:02 (GMT +100)
-  lib/ansible/modules/extras: (detached HEAD fff5ae6994) last updated 2016/02/02 22:04:12 (GMT +100)
-  config file =
-  configured module search path = Default w/o overrides
-``` 
-
-Also notice that in this vagrant development environment, the version of ansible is v2.1.0.  
-
 
 ### Pre-reqs
 
@@ -48,9 +27,9 @@ you need to have the following installed on your host machine:
 * [virtualbox](https://www.virtualbox.org/)  
 * [packer](https://www.packer.io/)
 * [vagrant](https://www.vagrantup.com/)
-* [git-bash](https://msysgit.github.io/)
+* [git-bash](https://msysgit.github.io/)   Note: this is not required for Apple Macs
 
-Once they are all installed, do the following:
+Once they are all installed, do the following (not required for macs):
 
 1. right click on the virtualbox icon, 
 2. go to properties, 
@@ -61,7 +40,7 @@ Once they are all installed, do the following:
 7. Repeat the above steps, but this time for Git bash, You can find this icon under, start -> All programs -> git -> Git Bash 
 
 
-Next we need to configure Git bash to make it easier to use:
+Next we need to configure Git bash to make it easier to use (note, this is not required for macs):
 
 1. Open new git bash tereminal
 2. right click on the header -> defaults -> "Options" tab -> enable check boxes (there's four in total)
@@ -109,12 +88,12 @@ The "GitServerCertificates" folder should contain .pem files only, so that you c
 
 ### Set up
 
-Start a git-bash terminal
+Start a git-bash or bash terminal
 
 cd into the project folder and run the following to create the 2 ".box"" files
 
 ```sh
-$ packer build puppetmaster.json
+$ packer build master4.json
 $ packer build client.json
 ```
 Each of the above commands will take about 20 minutes to complete, but depends on your machine specs and internet connections. 
@@ -130,7 +109,7 @@ There are also 2 ansible CentOS 7 clients that you can start up:
 
 ```sh
 $ vagrant up puppetagent01
-$ vagrant up puppetagent01
+$ vagrant up puppetagent02
 ``` 
 
 
