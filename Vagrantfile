@@ -22,7 +22,7 @@ Vagrant.configure(2) do |config|
   ##
   # The "puppet4master" string is the name of the box. hence you can do "vagrant up puppet4444master"
   config.vm.define "puppet4master" do |puppet4master_config|
-    puppet4master_config.vm.box = "master4.box"
+    puppet4master_config.vm.box = "CodingBee/centos7"
 
     # this set's the machine's hostname.
     puppet4master_config.vm.hostname = "puppet4master.local"
@@ -35,7 +35,7 @@ Vagrant.configure(2) do |config|
 
     puppet4master_config.vm.provider "virtualbox" do |vb|
       # Display the VirtualBox GUI when booting the machine
-      vb.gui = false
+      vb.gui = true
       # For common vm settings, e.g. setting ram and cpu we use:
       vb.memory = "2048"
       vb.cpus = 2
@@ -60,6 +60,7 @@ Vagrant.configure(2) do |config|
     puppet4master_config.vm.provision "shell", path: "scripts/import-ssh-keys.sh"
 
     puppet4master_config.vm.provision "shell", path: "scripts/install-puppet4master.sh"
+    puppet4master_config.vm.provision "shell", path: "scripts/update-git.sh"
     puppet4master_config.vm.provision "shell", path: "scripts/install-vim-puppet-plugins.sh", privileged: false
     # for some reason I have to restart network, but this needs more investigation
     puppet4master_config.vm.provision "shell" do |remote_shell|
@@ -78,7 +79,7 @@ Vagrant.configure(2) do |config|
   ##
   (1..2).each do |i|
     config.vm.define "puppet4agent0#{i}" do |puppet4agent_config|
-      puppet4agent_config.vm.box = "client.box"
+      puppet4agent_config.vm.box = "CodingBee/centos7"
       puppet4agent_config.vm.hostname = "puppetagent0#{i}.local"
       puppet4agent_config.vm.network "private_network", ip: "192.168.51.10#{i}"
       puppet4agent_config.vm.provider "virtualbox" do |vb|
@@ -96,7 +97,7 @@ Vagrant.configure(2) do |config|
 
       # this takes a vm snapshot (which we have called "basline") as the last step of "vagrant up".
       puppet4agent_config.vm.provision :host_shell do |host_shell|
-        host_shell.inline = "vagrant snapshot take puppetagent0#{i} baseline"
+        host_shell.inline = "vagrant snapshot take puppet4agent0#{i} baseline"
       end
 
     end
