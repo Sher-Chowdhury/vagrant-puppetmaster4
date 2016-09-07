@@ -25,7 +25,7 @@ Vagrant.configure(2) do |config|
     puppet4master_config.vm.box = "CodingBee/centos7"
 
     # this set's the machine's hostname.
-    puppet4master_config.vm.hostname = "puppet4master.local"
+    puppet4master_config.vm.hostname = "puppetmaster.local"
 
 
     # This will appear when you do "ip addr show". You can then access your guest machine's website using "http://192.168.50.4"
@@ -77,7 +77,7 @@ Vagrant.configure(2) do |config|
   ##
   ## Puppet agents - linux 7 boxes
   ##
-  (1..2).each do |i|
+  (1..1).each do |i|
     config.vm.define "puppet4agent0#{i}" do |puppet4agent_config|
       puppet4agent_config.vm.box = "CodingBee/centos7"
       puppet4agent_config.vm.hostname = "puppetagent0#{i}.local"
@@ -95,6 +95,8 @@ Vagrant.configure(2) do |config|
         remote_shell.inline = "systemctl restart network"
       end
 
+      puppet4agent_config.vm.provision "shell", path: "scripts/install-puppet4-agent.sh"
+
       # this takes a vm snapshot (which we have called "basline") as the last step of "vagrant up".
       puppet4agent_config.vm.provision :host_shell do |host_shell|
         host_shell.inline = "vagrant snapshot take puppet4agent0#{i} baseline"
@@ -107,9 +109,9 @@ Vagrant.configure(2) do |config|
   # it adds entry to the /etc/hosts file.
   # this block is placed outside the define blocks so that it gts applied to all VMs that are defined in this vagrantfile.
   config.vm.provision :hosts do |provisioner|
-    provisioner.add_host '192.168.51.100', ['puppet4master', 'puppet4master.local']
-    provisioner.add_host '192.168.51.101', ['puppet4agent01', 'puppet4agent01.local']
-    provisioner.add_host '192.168.51.102', ['puppet4agent02', 'puppet4agent02.local']
+    provisioner.add_host '192.168.51.100', ['puppetmaster', 'puppetmaster.local']
+    provisioner.add_host '192.168.51.101', ['puppetagent01', 'puppetagent01.local']
+    provisioner.add_host '192.168.51.102', ['puppetagent02', 'puppetagent02.local']
   end
 
   config.vm.provision :host_shell do |host_shell|

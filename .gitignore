@@ -1,4 +1,5 @@
 /scripts/tmp
+/personal-data
 /personal-data/hiera.yaml
 /personal-data/.gitconfig
 /personal-data/id_rsa
