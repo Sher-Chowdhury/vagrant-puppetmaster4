@@ -21,6 +21,7 @@ Vagrant.configure(2) do |config|
   ##  puppet4master
   ##
   # The "puppet4master" string is the name of the box. hence you can do "vagrant up puppet4444master"
+  config.ssh.forward_agent = false  # a possible fix for a colleague's issue
   config.vm.define "puppet4master" do |puppet4master_config|
     puppet4master_config.vm.box = "CodingBee/centos7"
 
@@ -78,6 +79,7 @@ Vagrant.configure(2) do |config|
   ## Puppet agents - linux 7 boxes
   ##
   (1..1).each do |i|
+    config.ssh.forward_agent = false  # a possible fix for a colleague's issue
     config.vm.define "puppet4agent0#{i}" do |puppet4agent_config|
       puppet4agent_config.vm.box = "CodingBee/centos7"
       puppet4agent_config.vm.hostname = "puppetagent0#{i}.local"
