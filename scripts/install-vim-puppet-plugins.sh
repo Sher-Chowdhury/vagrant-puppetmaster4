@@ -3,7 +3,8 @@ echo '##########################################################################
 echo '##### About to run install-vim-puppet-plugins.sh script ##################'
 echo '##########################################################################'
 
-
+yum install -y epel-release || exit 1
+yum install -y vim || exit 1
 
 # Some useful plugins: http://vimawesome.com/
 
@@ -60,3 +61,4 @@ cat /vagrant/files/.vimrc >> ~/.vimrc || exit 1
 
 echo "--no-80chars-check" >> ~/.puppet-lint.rc || exit 1   # http://stackoverflow.com/questions/29206887/puppet-lint-configuration-file
                                                            # https://github.com/rodjek/puppet-lint#puppet-lint-1
+echo "--no-140chars-check" >> ~/.puppet-lint.rc || exit 1 
