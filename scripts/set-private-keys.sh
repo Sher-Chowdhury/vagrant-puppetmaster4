@@ -1,4 +1,5 @@
 #!/bin/bash
+yum install -y wget
 if [ ! -d /home/vagrant/.ssh ]; then
   mkdir -p /home/vagrant/.ssh
   chown vagrant:vagrant /home/vagrant/.ssh
