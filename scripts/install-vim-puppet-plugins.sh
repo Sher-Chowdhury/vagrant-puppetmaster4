@@ -3,8 +3,8 @@ echo '##########################################################################
 echo '##### About to run install-vim-puppet-plugins.sh script ##################'
 echo '##########################################################################'
 
-yum install -y epel-release || exit 1
-yum install -y vim || exit 1
+sudo yum install -y epel-release || exit 1
+sudo yum install -y vim || exit 1
 
 # Some useful plugins: http://vimawesome.com/
 
