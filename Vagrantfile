@@ -20,7 +20,7 @@ Vagrant.configure(2) do |config|
   ##
   ##  puppet4master
   ##
-  # The "puppet4master" string is the name of the box. hence you can do "vagrant up puppet4444master"
+  # The "puppet4master" string is the name of the box hence you can do "vagrant up puppet4master"
   config.vm.define "puppet4master" do |puppet4master_config|
 
     # Box used is https://github.com/holms/vagrant-centos7-box/releases/download/7.1.1503.001/CentOS-7.1.1503-x86_64-netboot.box
@@ -68,21 +68,6 @@ Vagrant.configure(2) do |config|
       remote_shell.inline = "systemctl restart network"
     end
 
-    #add hosts into /etc/hosts for puppet master and all agents
-    config.vm.provision :hosts do |provisioner|
-      provisioner.add_host '192.168.51.100', ['puppetmaster', 'puppetmaster.local']
-      provisioner.add_host '192.168.51.101', ['puppetagent01', 'puppetagent01.local']
-    end
-      #provisioner.add_host '192.168.51.102', ['puppetagent02', 'puppetagent02.local']
-
-    config.vm.provision :host_shell do |host_shell|
-      host_shell.inline = 'hostfile=/c/Windows/System32/drivers/etc/hosts && grep -q 192.168.51.100 $hostfile || echo "192.168.50.100   puppet4master puppet4master.local" >> $hostfile'
-    end
-
-    config.vm.provision :host_shell do |host_shell|
-      host_shell.inline = 'hostfile=/c/Windows/System32/drivers/etc/hosts && grep -q 192.168.51.101 $hostfile || echo "192.168.50.101   puppet4agent01 puppet4agent01.local" >> $hostfile'
-    end
-
     # this takes a vm snapshot (which we have called "baseline") as the last step of "vagrant up".
     puppet4master_config.vm.provision :host_shell do |host_shell|
       host_shell.inline = 'vagrant snapshot take puppet4master baseline'
@@ -90,7 +75,7 @@ Vagrant.configure(2) do |config|
   end
 
   ##
-  ## Puppet agents - linux 7 boxes
+  ## Puppet agents - Centos 7 boxes
   ##
 
   #Loop increments number of puppet agents
@@ -114,6 +99,9 @@ Vagrant.configure(2) do |config|
       end
 
       puppet4agent_config.vm.provision "shell", path: "scripts/install-puppet4-agent.sh"
+
+      #Network Connectivity Test to Puppet master - agent must be run after puppet master has been set up and is running
+      config.vm.provision "shell", path: "scripts/agent-network-connectivity-test.sh"
 
       # this takes a vm snapshot (which we have called "basline") as the last step of "vagrant up".
       puppet4agent_config.vm.provision :host_shell do |host_shell|
@@ -142,8 +130,5 @@ Vagrant.configure(2) do |config|
   #config.vm.provision :host_shell do |host_shell|
   #  host_shell.inline = 'hostfile=/c/Windows/System32/drivers/etc/hosts && grep -q 192.168.51.102 $hostfile || echo "192.168.50.102   puppet4agent02 puppet4agent02.local" >> $hostfile'
   #end
-
-  #Network Connectivity Test to Puppet master - agent must be run after puppet master has been set up and is running
-  config.vm.provision "shell", path: "scripts/agent-network-connectivity-test.sh"
 
 end
