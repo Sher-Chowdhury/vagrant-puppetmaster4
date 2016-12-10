@@ -140,4 +140,8 @@ Vagrant.configure(2) do |config|
   #config.vm.provision :host_shell do |host_shell|
   #  host_shell.inline = 'hostfile=/c/Windows/System32/drivers/etc/hosts && grep -q 192.168.51.102 $hostfile || echo "192.168.50.102   puppet4agent02 puppet4agent02.local" >> $hostfile'
   #end
+
+  #Network Connectivity Test to Puppet master - agent must be run after puppet master has been set up and is running
+  config.vm.provision "shell", path: "scripts/agent-network-connectivity-test.sh"
+
 end
