@@ -5,6 +5,7 @@ echo '##########################################################################
 
 sudo yum install -y epel-release || exit 1
 sudo yum install -y vim || exit 1
+sudo yum install -y telnet || exit 1
 
 # Some useful plugins: http://vimawesome.com/
 
