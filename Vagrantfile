@@ -22,7 +22,7 @@ Vagrant.configure(2) do |config|
   ##
   # The "puppet4master" string is the name of the box. hence you can do "vagrant up puppet4444master"
   config.vm.define "puppet4master" do |puppet4master_config|
-    puppet4master_config.vm.box = "centos/7"
+    puppet4master_config.vm.box = "https://github.com/holms/vagrant-centos7-box/releases/download/7.1.1503.001/CentOS-7.1.1503-x86_64-netboot.box" #original box centos/7
 
     # this set's the machine's hostname.
     puppet4master_config.vm.hostname = "puppetmaster.local"
@@ -38,7 +38,7 @@ Vagrant.configure(2) do |config|
       vb.gui = true
       # For common vm settings, e.g. setting ram and cpu we use:
       vb.memory = "2048"
-      vb.cpus = 2
+      vb.cpus = 1
       # However for more obscure virtualbox specific settings we fall back to virtualbox's "modifyvm" command:
       vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
       # name of machine that appears on the vb console and vb consoles title.
@@ -67,21 +67,37 @@ Vagrant.configure(2) do |config|
       remote_shell.inline = "systemctl restart network"
     end
 
-    # this takes a vm snapshot (which we have called "basline") as the last step of "vagrant up".
+    #add hosts into /etc/hosts for puppet master and all agents
+    config.vm.provision :hosts do |provisioner|
+      provisioner.add_host '192.168.51.100', ['puppetmaster', 'puppetmaster.local']
+      provisioner.add_host '192.168.51.101', ['puppetagent01', 'puppetagent01.local']
+    end
+      #provisioner.add_host '192.168.51.102', ['puppetagent02', 'puppetagent02.local']
+
+    config.vm.provision :host_shell do |host_shell|
+      host_shell.inline = 'hostfile=/c/Windows/System32/drivers/etc/hosts && grep -q 192.168.51.100 $hostfile || echo "192.168.50.100   puppet4master puppet4master.local" >> $hostfile'
+    end
+
+    config.vm.provision :host_shell do |host_shell|
+      host_shell.inline = 'hostfile=/c/Windows/System32/drivers/etc/hosts && grep -q 192.168.51.101 $hostfile || echo "192.168.50.101   puppet4agent01 puppet4agent01.local" >> $hostfile'
+    end
+
+    # this takes a vm snapshot (which we have called "baseline") as the last step of "vagrant up".
     puppet4master_config.vm.provision :host_shell do |host_shell|
       host_shell.inline = 'vagrant snapshot take puppet4master baseline'
     end
-
   end
 
   ##
   ## Puppet agents - linux 7 boxes
   ##
+
+  #Loop increments number of puppet agents
   (1..1).each do |i|
     config.vm.define "puppet4agent0#{i}" do |puppet4agent_config|
-      puppet4agent_config.vm.box = "centos/7"
+      puppet4agent_config.vm.box = "https://github.com/holms/vagrant-centos7-box/releases/download/7.1.1503.001/CentOS-7.1.1503-x86_64-netboot.box"
       puppet4agent_config.vm.hostname = "puppetagent0#{i}.local"
-      puppet4agent_config.vm.network "private_network", ip: "192.168.51.10#{i}"
+      puppet4agent_config.vm.network "private_network", ip: "192.168.51.10#{i}" #So puppet4agent01 would have a last octect of 101, 02 is 102 etc.
       puppet4agent_config.vm.provider "virtualbox" do |vb|
         vb.gui = false
         vb.memory = "1024"
@@ -111,7 +127,6 @@ Vagrant.configure(2) do |config|
   config.vm.provision :hosts do |provisioner|
     provisioner.add_host '192.168.51.100', ['puppetmaster', 'puppetmaster.local']
     provisioner.add_host '192.168.51.101', ['puppetagent01', 'puppetagent01.local']
-    provisioner.add_host '192.168.51.102', ['puppetagent02', 'puppetagent02.local']
   end
 
   config.vm.provision :host_shell do |host_shell|
@@ -122,7 +137,7 @@ Vagrant.configure(2) do |config|
     host_shell.inline = 'hostfile=/c/Windows/System32/drivers/etc/hosts && grep -q 192.168.51.101 $hostfile || echo "192.168.50.101   puppet4agent01 puppet4agent01.local" >> $hostfile'
   end
 
-  config.vm.provision :host_shell do |host_shell|
-    host_shell.inline = 'hostfile=/c/Windows/System32/drivers/etc/hosts && grep -q 192.168.51.102 $hostfile || echo "192.168.50.102   puppet4agent02 puppet4agent02.local" >> $hostfile'
-  end
+  #config.vm.provision :host_shell do |host_shell|
+  #  host_shell.inline = 'hostfile=/c/Windows/System32/drivers/etc/hosts && grep -q 192.168.51.102 $hostfile || echo "192.168.50.102   puppet4agent02 puppet4agent02.local" >> $hostfile'
+  #end
 end
