@@ -107,22 +107,11 @@ Vagrant.configure(2) do |config|
 
   # this line relates to the vagrant-hosts plugin, https://github.com/oscar-stack/vagrant-hosts
   # it adds entry to the /etc/hosts file.
-  # this block is placed outside the define blocks so that it gts applied to all VMs that are defined in this vagrantfile.
+  # this block is placed outside the define blocks so that it gets applied to all VMs that are defined in this vagrantfile.
   config.vm.provision :hosts do |provisioner|
     provisioner.add_host '192.168.51.100', ['puppetmaster', 'puppetmaster.local']
     provisioner.add_host '192.168.51.101', ['puppetagent01', 'puppetagent01.local']
     provisioner.add_host '192.168.51.102', ['puppetagent02', 'puppetagent02.local']
   end
 
-  config.vm.provision :host_shell do |host_shell|
-    host_shell.inline = 'hostfile=/c/Windows/System32/drivers/etc/hosts && grep -q 192.168.51.100 $hostfile || echo "192.168.50.100   puppet4master puppet4master.local" >> $hostfile'
-  end
-
-  config.vm.provision :host_shell do |host_shell|
-    host_shell.inline = 'hostfile=/c/Windows/System32/drivers/etc/hosts && grep -q 192.168.51.101 $hostfile || echo "192.168.50.101   puppet4agent01 puppet4agent01.local" >> $hostfile'
-  end
-
-  config.vm.provision :host_shell do |host_shell|
-    host_shell.inline = 'hostfile=/c/Windows/System32/drivers/etc/hosts && grep -q 192.168.51.102 $hostfile || echo "192.168.50.102   puppet4agent02 puppet4agent02.local" >> $hostfile'
-  end
 end

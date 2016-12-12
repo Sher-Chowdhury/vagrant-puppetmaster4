@@ -26,6 +26,7 @@ you need to have the following installed on your host machine:
 
 * [virtualbox](https://www.virtualbox.org/)  
 * [vagrant](https://www.vagrantup.com/)
+* gitbash or cygwin - (if you are using running vagrant on a windows laptop/workstation)
 
 Once they are all installed, do the following (not required for macs):
 
@@ -36,6 +37,18 @@ Once they are all installed, do the following (not required for macs):
 5. enable the "Run as Administrator" checkbox
 6. Then apply and save changes
 7. Repeat the above steps, but this time for Git bash, You can find this icon under, start -> All programs -> git -> Git Bash
+
+
+Open up a bash/cygyin/gitbash terminal and ensure the following files exist in the following folder:
+
+```
+ls -l ~/.ssh
+-rw-------  1 schowdhury  staff  1679  6 Sep 15:52 id_rsa
+-rw-r--r--  1 schowdhury  staff   406  7 Sep 11:10 id_rsa.pub
+```
+
+
+If you don't, then run the ssh-keygen command to get it generated.
 
 
 ### Pre-reqs (optional, but recommended)
@@ -53,9 +66,11 @@ total 1
 However if your host machine is a windows machine, then create folder "C:\vagrant-personal-files" and place the above files in there instead.
 
 
+
+
 ### Set up
 
-Start a bash terminal
+Start a bash/cygwin terminal
 
 cd into the project folder and run the following:
 
@@ -68,26 +83,40 @@ This will take about 20 minutes to complete, but depends on your machine specs a
 
 
 
-There are also 2 ansible CentOS 7 clients that you can start up:
+There are also 2 CentOS 7 clients that you can start up:
 
 
 ```sh
 $ vagrant up puppet4agent01
 $ vagrant up puppet4agent02
 ```
+Note, you can increase/decrease the number of agents by tweaking the for loop in the Vagrantfile.
 
 
+### Update your host machine's host file
 
-### Set up local rerouting if you are running vagrant on windows machine
-
-Enter this in the windows hosts file (C:\Windows\System32\drivers\etc\hosts), or /etc/hosts file if your using an Apple Mac:
+You should append the following lines to your host file:
 
 ```
-# https://github.com/Sher-Chowdhury/vagrant-puppetmaster4
-192.168.50.100   puppetmaster puppetmaster.local
-192.168.50.101   puppetagent01 puppetagent01.local
-192.168.50.102   puppetagent02 puppetagent02.local
+192.168.50.100   puppet4master puppet4master.local
+192.168.50.101   puppet4agent01 puppet4agent01.local
+192.168.50.102   puppet4agent02 puppet4agent02.local
 ```
+
+If your host machine, then update then your host file is located at:
+
+```sh
+$ sudo vim /etc/hosts
+```
+
+And for Window's users the host file is likely to be here:
+
+```
+c:\Windows\System32\drivers\etc\hosts
+```
+
+Having thes in place will allow you to things via your laptops/workstations web browser, e.g. if you installed apache web server on puppet4agent01, then you can view it in firefox/chrome by navigating to http://puppet4agent01.local
+
 
 ### Login credentials
 you can ssh into all your machines using the following credential:
@@ -113,7 +142,7 @@ password: vagrant
 Note, it is common practice to login as the vagrant user, then do 'sudo -i' to become root.
 
 
-If you want to login as the vagrant user, then you can do it with the following shorthand technique (using puppet4master as an example):
+If you want to login as the vagrant user, then you can do it with the following shorthand technique, e.g.:
 
 ```sh
 $ vagrant ssh puppet4master
@@ -125,26 +154,26 @@ This approach is handy in case you didn't know what the vagrant user's password 
 
 ### Auto snapshots
 
-On accasions you'll want to reset your vagrant boxes. This is usually done by doing "vagrant destroy" followed by "vagrant up". This can be timeconsuming. A much faster approach is to use virtualbox snapshots instead.
+On accasions you'll want to reset your vagrant boxes. This is usually done by doing "vagrant destroy" followed by "vagrant up". This can be time consuming. A much faster approach is to use virtualbox snapshots instead.
 
 
 For each vm, a virtualbox is taken towards the end of your "vagrant up". This snapshot is called "baseline". If you want to roll back to this snapshot, then you do:
 
 ```sh
-$ vagrant snapshot go puppetmaster baseline
+$ vagrant snapshot go puppet4master baseline
 ```
 
-...or for an ansible client, e.g. puppetagent01, you do:
+...or for an puppet agent, e.g. puppetagent01, you do:
 
 ```sh
-$ vagrant snapshot go puppetagent01 baseline
+$ vagrant snapshot go puppet4agent01 baseline
 ```
 
 ### Start all over again
-If you want to start from the begining again, then do:
+If you want to start from the beginning again, then do:
 
 ```sh
-$ vagrant destroy
+$ vagrant destroy --force
 $ vagrant box list
 $ vagrant box remove {box name}
 ```
