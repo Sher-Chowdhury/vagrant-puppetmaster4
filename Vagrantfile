@@ -64,6 +64,11 @@ Vagrant.configure(2) do |config|
     puppet4master_config.vm.provision "shell", path: "scripts/update-git.sh"
     puppet4master_config.vm.provision "shell", path: "scripts/install-vim-puppet-plugins.sh", privileged: false
 
+    #Stop the default centos7 firewall service
+    puppet4agent_config.vm.provision "shell" do |remote_shell|
+      remote_shell.inline = "systemctl stop firewalld"
+    end
+
     # for some reason I have to restart network if host machine is a windows machine, but this needs more investigation
     #puppet4master_config.vm.provision "shell" do |remote_shell|
     #  remote_shell.inline = "systemctl stop NetworkManager"
@@ -98,6 +103,11 @@ Vagrant.configure(2) do |config|
 
       puppet4agent_config.vm.provision "shell", path: "scripts/install-puppet4-agent.sh"
       puppet4agent_config.vm.provision "shell", path: "scripts/install-vim-puppet-plugins.sh"
+      #Stop the default centos7 firewall service
+      puppet4agent_config.vm.provision "shell" do |remote_shell|
+        remote_shell.inline = "systemctl stop firewalld"
+      end	
+
       #Network Connectivity Test to Puppet master - agent must be run after puppet master has been set up and is running
       #config.vm.provision "shell", path: "scripts/agent-network-connectivity-test.sh"
 
