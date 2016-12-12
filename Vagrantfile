@@ -65,11 +65,11 @@ Vagrant.configure(2) do |config|
     puppet4master_config.vm.provision "shell", path: "scripts/install-vim-puppet-plugins.sh", privileged: false
 
     # for some reason I have to restart network if host machine is a windows machine, but this needs more investigation
-    puppet4master_config.vm.provision "shell" do |remote_shell|
-      remote_shell.inline = "systemctl stop NetworkManager"
-      remote_shell.inline = "systemctl disable NetworkManager"
-      remote_shell.inline = "systemctl restart network"
-    end
+    #puppet4master_config.vm.provision "shell" do |remote_shell|
+    #  remote_shell.inline = "systemctl stop NetworkManager"
+    #  remote_shell.inline = "systemctl disable NetworkManager"
+    #  remote_shell.inline = "systemctl restart network"
+    #end
 
     # this takes a vm snapshot (which we have called "baseline") as the last step of "vagrant up".
     puppet4master_config.vm.provision :host_shell do |host_shell|
@@ -97,7 +97,7 @@ Vagrant.configure(2) do |config|
       end
 
       puppet4agent_config.vm.provision "shell", path: "scripts/install-puppet4-agent.sh"
-
+      puppet4agent_config.vm.provision "shell", path: "scripts/install-vim-puppet-plugins.sh"
       #Network Connectivity Test to Puppet master - agent must be run after puppet master has been set up and is running
       #config.vm.provision "shell", path: "scripts/agent-network-connectivity-test.sh"
 
@@ -105,13 +105,13 @@ Vagrant.configure(2) do |config|
       puppet4agent_config.vm.provision :host_shell do |host_shell|
         host_shell.inline = "vagrant snapshot take puppet4agent0#{i} baseline"
       end
-
+      
       # for some reason I have to restart network if host machine is a windows machine, but this needs more investigation
-      puppet4agent_config.vm.provision "shell" do |remote_shell|
-        remote_shell.inline = "systemctl stop NetworkManager"
-        remote_shell.inline = "systemctl disable NetworkManager"
-        remote_shell.inline = "systemctl restart network"
-      end
+      #puppet4agent_config.vm.provision "shell" do |remote_shell|
+       # remote_shell.inline = "systemctl stop NetworkManager"
+       # remote_shell.inline = "systemctl disable NetworkManager"
+       # remote_shell.inline = "systemctl restart network"
+      #end
 
     end
   end
