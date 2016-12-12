@@ -87,7 +87,7 @@ Vagrant.configure(2) do |config|
   ##
 
   #Loop increments number of puppet agents
-  (1..1).each do |i|
+  (1..2).each do |i|
     config.vm.define "puppet4agent0#{i}" do |puppet4agent_config|
       # Box used is https://github.com/holms/vagrant-centos7-box/releases/download/7.1.1503.001/CentOS-7.1.1503-x86_64-netboot.box
       puppet4agent_config.vm.box = "CentOS7.0"
@@ -107,7 +107,7 @@ Vagrant.configure(2) do |config|
       end	
 
       puppet4agent_config.vm.provision "shell", path: "scripts/install-puppet4-agent.sh"
-      puppet4agent_config.vm.provision "shell", path: "scripts/install-vim-puppet-plugins.sh"
+
       #Network Connectivity Test to Puppet master - agent must be run after puppet master has been set up and is running
       #config.vm.provision "shell", path: "scripts/agent-network-connectivity-test.sh"
 
