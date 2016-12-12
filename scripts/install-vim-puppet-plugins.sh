@@ -21,7 +21,7 @@ cd ~/.vim/bundle || exit 1
 echo "about to install syntastic"
 git clone https://github.com/scrooloose/syntastic.git || exit 1
 echo "about to install vim-puppet"
-git clone https://git://github.com/rodjek/vim-puppet.git      || exit 1
+git clone https://github.com/rodjek/vim-puppet.git      || exit 1
 echo "about to install tabular"
 git clone https://github.com/godlygeek/tabular.git      || exit 1
 #git clone https://github.com/scrooloose/nerdtree.git  || exit 1
