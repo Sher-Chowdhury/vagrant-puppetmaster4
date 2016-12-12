@@ -64,9 +64,9 @@ Vagrant.configure(2) do |config|
     puppet4master_config.vm.provision "shell", path: "scripts/update-git.sh"
     puppet4master_config.vm.provision "shell", path: "scripts/install-vim-puppet-plugins.sh", privileged: false
     # for some reason I have to restart network, but this needs more investigation
-    puppet4master_config.vm.provision "shell" do |remote_shell|
-      remote_shell.inline = "systemctl restart network"
-    end
+   # puppet4master_config.vm.provision "shell" do |remote_shell|
+   #   remote_shell.inline = "systemctl restart network"
+   # end
 
     # this takes a vm snapshot (which we have called "baseline") as the last step of "vagrant up".
     puppet4master_config.vm.provision :host_shell do |host_shell|
@@ -94,14 +94,14 @@ Vagrant.configure(2) do |config|
       end
 
       # for some reason I have to restart network, but this needs more investigation
-      puppet4agent_config.vm.provision "shell" do |remote_shell|
-        remote_shell.inline = "systemctl restart network"
-      end
+      #puppet4agent_config.vm.provision "shell" do |remote_shell|
+      #  remote_shell.inline = "systemctl restart network"
+      #end
 
       puppet4agent_config.vm.provision "shell", path: "scripts/install-puppet4-agent.sh"
 
       #Network Connectivity Test to Puppet master - agent must be run after puppet master has been set up and is running
-      config.vm.provision "shell", path: "scripts/agent-network-connectivity-test.sh"
+      #config.vm.provision "shell", path: "scripts/agent-network-connectivity-test.sh"
 
       # this takes a vm snapshot (which we have called "basline") as the last step of "vagrant up".
       puppet4agent_config.vm.provision :host_shell do |host_shell|
