@@ -122,8 +122,6 @@ Vagrant.configure(2) do |config|
        # remote_shell.inline = "systemctl disable NetworkManager"
        # remote_shell.inline = "systemctl restart network"
       #end
-
-    end
   end
 
   # this line relates to the vagrant-hosts plugin, https://github.com/oscar-stack/vagrant-hosts
@@ -145,4 +143,5 @@ Vagrant.configure(2) do |config|
   #config.vm.provision :host_shell do |host_shell|
   #  host_shell.inline = 'hostfile=/c/Windows/System32/drivers/etc/hosts && grep -q 192.168.51.102 $hostfile || echo "192.168.50.102   puppet4agent02 puppet4agent02.local" >> $hostfile'
   #end
+  end
 end

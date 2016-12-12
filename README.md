@@ -181,10 +181,10 @@ $ vagrant snapshot go puppet4agent01 baseline
 ```
 
 ### Start all over again
-If you want to start from the beginning again, then do:
+If you want to start from the beginning again, for a particular box, e.g. puppetagent01, then do:
 
 ```sh
-$ vagrant destroy --force
+$ vagrant destroy puppetagent01 --force
 $ vagrant box list
 $ vagrant box remove {box name}
 ```
