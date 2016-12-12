@@ -64,6 +64,8 @@ Vagrant.configure(2) do |config|
     puppet4master_config.vm.provision "shell", path: "scripts/install-vim-puppet-plugins.sh", privileged: false
     # for some reason I have to restart network if host machine is a windows machine, but this needs more investigation
     puppet4master_config.vm.provision "shell" do |remote_shell|
+      remote_shell.inline = "systemctl stop firewalld"
+      remote_shell.inline = "systemctl disable firewalld"
       remote_shell.inline = "systemctl stop NetworkManager"
       remote_shell.inline = "systemctl disable NetworkManager"
       remote_shell.inline = "systemctl restart network"
@@ -101,6 +103,8 @@ Vagrant.configure(2) do |config|
 
       # for some reason I have to restart network if host machine is a windows machine, but this needs more investigation
       puppet4agent_config.vm.provision "shell" do |remote_shell|
+        remote_shell.inline = "systemctl stop firewalld"
+        remote_shell.inline = "systemctl disable firewalld"
         remote_shell.inline = "systemctl stop NetworkManager"
         remote_shell.inline = "systemctl disable NetworkManager"
         remote_shell.inline = "systemctl restart network"
