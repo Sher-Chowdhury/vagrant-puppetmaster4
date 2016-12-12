@@ -22,6 +22,7 @@ Here we have the puppetmaster vm, this has the free version of puppetmaster inst
 
 ### Pre-reqs
 
+#### Install necessary software
 you need to have the following installed on your host machine:
 
 * [virtualbox](https://www.virtualbox.org/)  
@@ -39,6 +40,7 @@ Once they are all installed, do the following (not required for macs):
 7. Repeat the above steps, but this time for Git bash, You can find this icon under, start -> All programs -> git -> Git Bash
 
 
+#### Setup git on your host machine.
 Open up a bash/cygyin/gitbash terminal and ensure the following files exist in the following folder:
 
 ```
@@ -48,8 +50,17 @@ ls -l ~/.ssh
 ```
 
 
-If you don't, then run the ssh-keygen command to get it generated.
+If you don't, then run the ssh-keygen command to get it generated. These files will get copied to your vagrant boxes so that you can passwordlessly using git repos from inside your git boxes.
 
+Now ensure you can ~/.gitconfig exists, with at least the user.name and user.email entries, if not then you can generate it by running the following commands:
+
+```
+$ git config --global user.name "FirstName LastName"
+$ git config --global user.email "MyEmailAddress@example.com"
+$ git config --global core.autocrlf false
+$ git config --global push.default simple
+```
+This file will then get copied to the
 
 ### Pre-reqs (optional, but recommended)
 
