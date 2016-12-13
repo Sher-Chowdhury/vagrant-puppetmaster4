@@ -14,8 +14,6 @@ if not plugins_to_install.empty?
   end
 end
 
-
-
 Vagrant.configure(2) do |config|
   ##
   ##  puppet4master
@@ -58,8 +56,8 @@ Vagrant.configure(2) do |config|
     puppet4master_config.vm.provision :host_shell do |host_shell|
       host_shell.inline = "[ -f ${HOME}/.ssh/id_rsa ] && cp -f ${HOME}/.ssh/id_rsa* ./personal-data/"
     end
-    puppet4master_config.vm.provision "shell", path: "scripts/import-ssh-keys.sh"
 
+    puppet4master_config.vm.provision "shell", path: "scripts/import-ssh-keys.sh"
     puppet4master_config.vm.provision "shell", path: "scripts/install-puppet4master.sh"
     puppet4master_config.vm.provision "shell", path: "scripts/update-git.sh"
     puppet4master_config.vm.provision "shell", path: "scripts/install-vim-puppet-plugins.sh", privileged: false
@@ -67,6 +65,7 @@ Vagrant.configure(2) do |config|
     #Stop the default centos7 firewall service
     puppet4master_config.vm.provision "shell" do |remote_shell|
       remote_shell.inline = "systemctl stop firewalld"
+      remote_shell.inline = "systemctl disable firewalld"
     end
 
     # this takes a vm snapshot (which we have called "baseline") as the last step of "vagrant up".
@@ -97,6 +96,7 @@ Vagrant.configure(2) do |config|
       #Stop the default centos7 firewall service
       puppet4agent_config.vm.provision "shell" do |remote_shell|
         remote_shell.inline = "systemctl stop firewalld"
+	remote_shell.inline = "systemctl disable firewalld"
       end	
 
       puppet4agent_config.vm.provision "shell", path: "scripts/install-puppet4-agent.sh"
@@ -108,6 +108,7 @@ Vagrant.configure(2) do |config|
       puppet4agent_config.vm.provision :host_shell do |host_shell|
         host_shell.inline = "vagrant snapshot take puppet4agent0#{i} baseline"
       end
+    end
   end
 
   # this line relates to the vagrant-hosts plugin, https://github.com/oscar-stack/vagrant-hosts
@@ -119,17 +120,4 @@ Vagrant.configure(2) do |config|
     provisioner.add_host '192.168.51.102', ['puppetagent02', 'puppetagent02.local']
   end
 
-  config.vm.provision :host_shell do |host_shell|
-    host_shell.inline = 'hostfile=/c/Windows/System32/drivers/etc/hosts && grep -q 192.168.51.100 $hostfile || echo "192.168.50.100   puppet4master puppet4master.local" >> $hostfile'
-  end
-
-  config.vm.provision :host_shell do |host_shell|
-    host_shell.inline = 'hostfile=/c/Windows/System32/drivers/etc/hosts && grep -q 192.168.51.101 $hostfile || echo "192.168.50.101   puppet4agent01 puppet4agent01.local" >> $hostfile'
-  end
-
-  config.vm.provision :host_shell do |host_shell|
-    host_shell.inline = 'hostfile=/c/Windows/System32/drivers/etc/hosts && grep -q 192.168.51.102 $hostfile || echo "192.168.50.102   puppet4agent02 puppet4agent02.local" >> $hostfile'
-  end
-
-  end
 end
