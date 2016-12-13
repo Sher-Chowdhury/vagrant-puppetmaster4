@@ -3,11 +3,9 @@ echo '##########################################################################
 echo '########About to run agent-network-connectivity-test.sh script ###########'
 echo '##########################################################################'
 
-sudo yum install -y telnet || exit 1
+sudo yum install -y nmap-ncat.x86_64 2:6.40-7.el7 || exit 1
 
 #Puppet master should be set as 192.168.51.100
-sudo telnet puppetmaster 8140 #Need to add some way to exit gracefully with the telnet command
-read "CTRL+5" ||| exit 1 #Gives ^]
-read "quit" || exit 1
+nc -w 2 -v puppetmaster 8140 </dev/null || exit 1
 
-echo "Network Puppet Master Connection Achieved!"
+echo "Network Puppet Master Server Connection Achieved!"

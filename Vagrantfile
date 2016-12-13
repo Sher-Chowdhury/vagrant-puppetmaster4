@@ -64,8 +64,9 @@ Vagrant.configure(2) do |config|
 
     #Stop the default centos7 firewall service
     puppet4master_config.vm.provision "shell" do |remote_shell|
-      remote_shell.inline = "systemctl stop firewalld"
-      remote_shell.inline = "systemctl disable firewalld"
+      remote_shell.inline = "sudo systemctl stop firewalld"
+      remote_shell.inline = "sudo systemctl disable firewalld"
+      remote_shell.inline = "sudo systemctl stop firewalld"
     end
 
     # this takes a vm snapshot (which we have called "baseline") as the last step of "vagrant up".
@@ -95,14 +96,15 @@ Vagrant.configure(2) do |config|
 
       #Stop the default centos7 firewall service
       puppet4agent_config.vm.provision "shell" do |remote_shell|
-        remote_shell.inline = "systemctl stop firewalld"
-	remote_shell.inline = "systemctl disable firewalld"
+        remote_shell.inline = "sudo systemctl stop firewalld"
+	remote_shell.inline = "sudo systemctl disable firewalld"
+	remote_shell.inline = "sudo systemctl stop firewalld"
       end	
 
       puppet4agent_config.vm.provision "shell", path: "scripts/install-puppet4-agent.sh"
 
       #Network Connectivity Test to Puppet master - agent must be run after puppet master has been set up and is running
-      #config.vm.provision "shell", path: "scripts/agent-network-connectivity-test.sh"
+      config.vm.provision "shell", path: "scripts/agent-network-connectivity-test.sh"
 
       # this takes a vm snapshot (which we have called "basline") as the last step of "vagrant up".
       puppet4agent_config.vm.provision :host_shell do |host_shell|
