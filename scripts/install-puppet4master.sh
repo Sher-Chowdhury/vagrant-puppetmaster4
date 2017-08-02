@@ -11,14 +11,14 @@ yum install -y ruby-devel   # this line is no longer required, so delete it sinc
 # http://docs.puppetlabs.com/puppet/4.3/reference/whered_it_go.html#new-codedir-holds-all-modulesmanifestsdata
 
 
-# This shows the location of all the various puppet config files. 
+# This shows the location of all the various puppet config files.
 # https://github.com/puppetlabs/puppet-specifications/blob/master/file_paths.md#puppetserver
 
-# puppet.conf is now stored in /etc/puppetlabs/puppet/puppet.conf   
+# puppet.conf is now stored in /etc/puppetlabs/puppet/puppet.conf
 # This is specified here:
 # http://docs.puppetlabs.com/puppet/4.3/reference/whered_it_go.html#nix-confdir-is-now-etcpuppetlabspuppet
 
-# The environments folder (/etc/puppet/environment) is now located at: 
+# The environments folder (/etc/puppet/environment) is now located at:
 # http://docs.puppetlabs.com/puppet/4.3/reference/whered_it_go.html#new-codedir-holds-all-modulesmanifestsdata
 
 
@@ -38,25 +38,25 @@ echo "PATH=$PATH:/opt/puppetlabs/bin" >> /root/.bashrc || exit 1
 PATH=$PATH:/opt/puppetlabs/bin || exit 1
 puppet --version || exit 1
 
-# this is so to get the puppetmaster to autosign puppet agent certificicates. 
+# this is so to get the puppetmaster to autosign puppet agent certificicates.
 # This means that you no longer need to do "puppet cert sign...etc"
 # https://docs.puppetlabs.com/puppet/latest/reference/ssl_autosign.html#basic-autosigning-autosignconf
 # https://docs.puppetlabs.com/puppet/latest/reference/config_file_autosign.html
 
 puppet config set autosign true --section master
 # echo '*' >> /etc/puppet/autosign.conf   # this line needs fixing, see:
-					  # https://docs.puppetlabs.com/puppet/latest/reference/config_file_autosign.html 
+					  # https://docs.puppetlabs.com/puppet/latest/reference/config_file_autosign.html
 
 
 ##
-## The following is a direct copy taken from puppet 3.8 config file. So need to investigate which parts I need. 
+## The following is a direct copy taken from puppet 3.8 config file. So need to investigate which parts I need.
 ##
 ## https://docs.puppetlabs.com/puppet/latest/reference/config_about_settings.html
 ## https://docs.puppetlabs.com/puppet/latest/reference/configuration.html
 fqdn=`hostnamectl | grep 'Static hostname' | cut -d':' -f2`
 
-puppet config set certname $fqdn --section agent 
-puppet config set server $fqdn --section agent 
+puppet config set certname $fqdn --section agent
+puppet config set server $fqdn --section agent
 
 #echo '    certname          = puppet4master.local' >> /etc/puppetlabs/puppet/puppet.conf
 #echo '    server            = puppet4master.local' >> /etc/puppetlabs/puppet/puppet.conf
@@ -65,3 +65,6 @@ systemctl enable puppetserver || exit 1
 systemctl start puppetserver  || exit 1
 systemctl restart puppetserver  || exit 1
 systemctl status puppetserver || exit 1
+
+yum install -y epel-release
+yum install -y bash-completion

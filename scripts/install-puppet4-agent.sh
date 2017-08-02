@@ -22,3 +22,6 @@ if [ $? -eq 0 ]; then
   puppet agent -t  2>/dev/null
   puppet agent -t
 fi
+
+yum install -y epel-release
+yum install -y bash-completion
