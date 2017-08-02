@@ -3,7 +3,7 @@
 
 
 # http://stackoverflow.com/questions/19492738/demand-a-vagrant-plugin-within-the-vagrantfile
-# not using 'vagrant-vbguest' vagrant plugin because now using bento images which has vbguestadditions preinstalled. 
+# not using 'vagrant-vbguest' vagrant plugin because now using bento images which has vbguestadditions preinstalled.
 required_plugins = %w( vagrant-hosts vagrant-share vagrant-vbguest vagrant-vbox-snapshot vagrant-host-shell vagrant-triggers vagrant-reload )
 plugins_to_install = required_plugins.select { |plugin| not Vagrant.has_plugin? plugin }
 if not plugins_to_install.empty?
@@ -24,7 +24,7 @@ Vagrant.configure(2) do |config|
   # The "puppet4master" string is the name of the box. hence you can do "vagrant up puppet4444master"
   config.vm.define "puppet4master" do |puppet4master_config|
     # puppet4master_config.vm.box = "centos/7" # not using this anymore because vbguest nees to be preinstalled, otherwise the vagrant folder
-    # only syncs on the initial vagrant up, but not anymore after that....for more info see: https://github.com/mitchellh/vagrant/issues/7811 
+    # only syncs on the initial vagrant up, but not anymore after that....for more info see: https://github.com/mitchellh/vagrant/issues/7811
     # I'm using bento boxes because they have vbguestadditions preinstalled, so that sync folders works straight away.
     puppet4master_config.vm.box = "bento/centos-7.3"
 
@@ -87,7 +87,7 @@ Vagrant.configure(2) do |config|
   ##
   (1..1).each do |i|
     config.vm.define "puppet4agent0#{i}" do |puppet4agent_config|
-      puppet4agent_config.vm.box = "centos/7"
+      puppet4agent_config.vm.box = "bento/centos-7.3"
       puppet4agent_config.vm.hostname = "puppetagent0#{i}.local"
       puppet4agent_config.vm.network "private_network", ip: "192.168.51.10#{i}"
       puppet4agent_config.vm.provider "virtualbox" do |vb|
