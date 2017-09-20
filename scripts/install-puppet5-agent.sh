@@ -2,10 +2,10 @@
 # this script is run on the agent only.
 
 echo '##########################################################################'
-echo '##### About to run install-puppet4-agent.sh script #######################'
+echo '##### About to run install-puppet5-agent.sh script #######################'
 echo '##########################################################################'
 
-rpm -Uvh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm || exit 1
+rpm -Uvh https://yum.puppetlabs.com/puppet5/puppet5-release-el-7.noarch.rpm || exit 1
 yum install -y puppet-agent || exit 1
 
 

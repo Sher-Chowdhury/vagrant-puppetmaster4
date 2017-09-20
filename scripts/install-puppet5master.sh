@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo '##########################################################################'
-echo '##### About to run install-puppetmaster4.sh script #######################'
+echo '##### About to run install-puppetmaster5.sh script #######################'
 echo '##########################################################################'
 
 
@@ -22,7 +22,15 @@ yum install -y ruby-devel   # this line is no longer required, so delete it sinc
 # http://docs.puppetlabs.com/puppet/4.3/reference/whered_it_go.html#new-codedir-holds-all-modulesmanifestsdata
 
 
-rpm -ivh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm  || exit 1
+# this installs puppet4
+#rpm -ivh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm  || exit 1
+
+
+
+# this installs puppet5
+# https://docs.puppet.com/puppet/5.1/puppet_platform.html#enterprise-linux-7 
+rpm -Uvh https://yum.puppetlabs.com/puppet5/puppet5-release-el-7.noarch.rpm
+
 
 yum install -y puppetserver || exit 1
 
@@ -66,5 +74,6 @@ systemctl start puppetserver  || exit 1
 systemctl restart puppetserver  || exit 1
 systemctl status puppetserver || exit 1
 
-yum install -y epel-release
-yum install -y bash-completion
+yum install -y epel-release || exit 1
+yum install -y bash-completion || exit 1
+yum install -y bash-completion-extras || exit 1

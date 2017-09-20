@@ -4,7 +4,7 @@
 
 # http://stackoverflow.com/questions/19492738/demand-a-vagrant-plugin-within-the-vagrantfile
 # not using 'vagrant-vbguest' vagrant plugin because now using bento images which has vbguestadditions preinstalled.
-required_plugins = %w( vagrant-hosts vagrant-share vagrant-vbguest vagrant-vbox-snapshot vagrant-host-shell vagrant-triggers vagrant-reload )
+required_plugins = %w( vagrant-hosts vagrant-host-shell vagrant-triggers )
 plugins_to_install = required_plugins.select { |plugin| not Vagrant.has_plugin? plugin }
 if not plugins_to_install.empty?
   puts "Installing plugins: #{plugins_to_install.join(' ')}"
@@ -19,25 +19,25 @@ end
 
 Vagrant.configure(2) do |config|
   ##
-  ##  puppet4master
+  ##  puppet5master
   ##
-  # The "puppet4master" string is the name of the box. hence you can do "vagrant up puppet4444master"
-  config.vm.define "puppet4master" do |puppet4master_config|
-    # puppet4master_config.vm.box = "centos/7" # not using this anymore because vbguest nees to be preinstalled, otherwise the vagrant folder
+  # The "puppet5master" string is the name of the box. hence you can do "vagrant up puppet5555master"
+  config.vm.define "puppet5master" do |puppet5master_config|
+    # puppet5master_config.vm.box = "centos/7" # not using this anymore because vbguest nees to be preinstalled, otherwise the vagrant folder
     # only syncs on the initial vagrant up, but not anymore after that....for more info see: https://github.com/mitchellh/vagrant/issues/7811
     # I'm using bento boxes because they have vbguestadditions preinstalled, so that sync folders works straight away.
-    puppet4master_config.vm.box = "bento/centos-7.3"
+    puppet5master_config.vm.box = "bento/centos-7.3"
 
     # this set's the machine's hostname.
-    puppet4master_config.vm.hostname = "puppetmaster.local"
+    puppet5master_config.vm.hostname = "puppetmaster.local"
 
 
-    # This will appear when you do "ip addr show". You can then access your guest machine's website using "http://192.168.50.4"
-    puppet4master_config.vm.network "private_network", ip: "192.168.51.100"
+    # This will appear when you do "ip addr show". You can then access your guest machine's website using "http://192.168.50.5"
+    puppet5master_config.vm.network "private_network", ip: "192.168.51.100"
     # note: this approach assigns a reserved internal ip addresses, which virtualbox's builtin router then reroutes the traffic to,
     #see: https://en.wikipedia.org/wiki/Private_network
 
-    puppet4master_config.vm.provider "virtualbox" do |vb|
+    puppet5master_config.vm.provider "virtualbox" do |vb|
       # Display the VirtualBox GUI when booting the machine
       vb.gui = false
       # For common vm settings, e.g. setting ram and cpu we use:
@@ -46,28 +46,28 @@ Vagrant.configure(2) do |config|
       # However for more obscure virtualbox specific settings we fall back to virtualbox's "modifyvm" command:
       vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
       # name of machine that appears on the vb console and vb consoles title.
-      vb.name = "puppet4master"
+      vb.name = "puppet5master"
     end
 
-    puppet4master_config.vm.provision :host_shell do |host_shell|
+    puppet5master_config.vm.provision :host_shell do |host_shell|
       host_shell.inline = "cp -f ${HOME}/.gitconfig ./personal-data/.gitconfig"
     end
 
-    puppet4master_config.vm.provision "shell" do |s|
+    puppet5master_config.vm.provision "shell" do |s|
       s.inline = '[ -f /vagrant/personal-data/.gitconfig ] && runuser -l vagrant -c "cp -f /vagrant/personal-data/.gitconfig ~"'
     end
 
     ## Copy the public+private keys from the host machine to the guest machine
-    puppet4master_config.vm.provision :host_shell do |host_shell|
+    puppet5master_config.vm.provision :host_shell do |host_shell|
       host_shell.inline = "[ -f ${HOME}/.ssh/id_rsa ] && cp -f ${HOME}/.ssh/id_rsa* ./personal-data/"
     end
-    puppet4master_config.vm.provision "shell", path: "scripts/import-ssh-keys.sh"
+    puppet5master_config.vm.provision "shell", path: "scripts/import-ssh-keys.sh"
 
-    puppet4master_config.vm.provision "shell", path: "scripts/install-puppet4master.sh"
-    puppet4master_config.vm.provision "shell", path: "scripts/update-git.sh"
-    puppet4master_config.vm.provision "shell", path: "scripts/install-vim-puppet-plugins.sh", privileged: false
+    puppet5master_config.vm.provision "shell", path: "scripts/install-puppet5master.sh"
+    puppet5master_config.vm.provision "shell", path: "scripts/update-git.sh"
+    puppet5master_config.vm.provision "shell", path: "scripts/install-vim-puppet-plugins.sh", privileged: false
     # for some reason I have to restart network if host machine is a windows machine, but this needs more investigation
-    puppet4master_config.vm.provision "shell" do |remote_shell|
+    puppet5master_config.vm.provision "shell" do |remote_shell|
       remote_shell.inline = "systemctl stop firewalld"
       remote_shell.inline = "systemctl disable firewalld"
       remote_shell.inline = "systemctl stop NetworkManager"
@@ -76,37 +76,37 @@ Vagrant.configure(2) do |config|
     end
 
     # this takes a vm snapshot (which we have called "basline") as the last step of "vagrant up".
-    puppet4master_config.vm.provision :host_shell do |host_shell|
-      host_shell.inline = 'vagrant snapshot take puppet4master baseline'
-    end
+#    puppet5master_config.vm.provision :host_shell do |host_shell|
+#      host_shell.inline = 'vagrant snapshot save puppet5master baseline'
+#    end
 
   end
 
   ##
   ## Puppet agents - linux 7 boxes
   ##
-  (1..1).each do |i|
-    config.vm.define "puppet4agent0#{i}" do |puppet4agent_config|
-      puppet4agent_config.vm.box = "bento/centos-7.3"
-      puppet4agent_config.vm.hostname = "puppetagent0#{i}.local"
-      puppet4agent_config.vm.network "private_network", ip: "192.168.51.10#{i}"
-      puppet4agent_config.vm.provider "virtualbox" do |vb|
+  (1..2).each do |i|
+    config.vm.define "puppet5agent0#{i}" do |puppet5agent_config|
+      puppet5agent_config.vm.box = "bento/centos-7.3"
+      puppet5agent_config.vm.hostname = "puppetagent0#{i}.local"
+      puppet5agent_config.vm.network "private_network", ip: "192.168.51.10#{i}"
+      puppet5agent_config.vm.provider "virtualbox" do |vb|
         vb.gui = false
         vb.memory = "1024"
         vb.cpus = 1
         vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
-        vb.name = "puppet4agent0#{i}"
+        vb.name = "puppet5agent0#{i}"
       end
 
-      puppet4agent_config.vm.provision "shell", path: "scripts/install-puppet4-agent.sh"
+      puppet5agent_config.vm.provision "shell", path: "scripts/install-puppet5-agent.sh"
 
       # this takes a vm snapshot (which we have called "basline") as the last step of "vagrant up".
-      puppet4agent_config.vm.provision :host_shell do |host_shell|
-        host_shell.inline = "vagrant snapshot take puppet4agent0#{i} baseline"
-      end
+ #     puppet5agent_config.vm.provision :host_shell do |host_shell|
+ #       host_shell.inline = "vagrant snapshot save puppet5agent0#{i} baseline"
+ #     end
 
       # for some reason I have to restart network if host machine is a windows machine, but this needs more investigation
-      puppet4agent_config.vm.provision "shell" do |remote_shell|
+      puppet5agent_config.vm.provision "shell" do |remote_shell|
         remote_shell.inline = "systemctl stop firewalld"
         remote_shell.inline = "systemctl disable firewalld"
         remote_shell.inline = "systemctl stop NetworkManager"
